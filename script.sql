@@ -6,7 +6,7 @@ create table cliente (
 	tipo_documento VARCHAR (100) NOT NULL,
 	nacionalidad VARCHAR (100) NOT NULL,
 	email VARCHAR (100) NOT NULL,
-	teléfono Integer ,
+	telefono Integer ,
 	fecha_nacimiento TIMESTAMP NOT NULL
 );
 create table concepto_puntos(

@@ -19,14 +19,15 @@ public class UsoPuntosDetalle {
     @Basic(optional = false)
     private Long idCabecera;
 
-    @Column(name="id_bolsa")
+    @ManyToOne()
+    @JoinColumn(name = "id_bolsa")
     @Basic(optional = false)
-    private Long idBolsa;
+    private BolsaPuntos idBolsa;
 
     public UsoPuntosDetalle(){
 
     }
-    public UsoPuntosDetalle(Long id, Integer puntajeUtilizado, Long idCabecera, Long idBolsa) {
+    public UsoPuntosDetalle(Long id, Integer puntajeUtilizado, Long idCabecera, BolsaPuntos idBolsa) {
         this.id = id;
         this.puntajeUtilizado = puntajeUtilizado;
         this.idCabecera = idCabecera;
@@ -57,11 +58,11 @@ public class UsoPuntosDetalle {
         this.idCabecera = idCabecera;
     }
 
-    public Long getIdBolsa() {
+    public BolsaPuntos getIdBolsa() {
         return idBolsa;
     }
 
-    public void setIdBolsa(Long idBolsa) {
+    public void setIdBolsa(BolsaPuntos idBolsa) {
         this.idBolsa = idBolsa;
     }
 

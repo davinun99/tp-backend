@@ -35,16 +35,17 @@ public class BolsaPuntos {
     @Basic(optional = false)
     private Integer montoOperacion;
 
-    @Column(name="id_cliente")
+    @ManyToOne()
+    @JoinColumn(name = "id_cliente")
     @Basic(optional = false)
-    private  Long idCliente;
+    private  Cliente idCliente;
 
 
     public  BolsaPuntos(){
 
     }
 
-    public BolsaPuntos(Long id, Date fechaAsignacion, Date fechaCaducidad, Integer puntajesAsignado, Integer puntajeUtilizado, Integer saldoPuntos, Integer montoOperacion, Long idCliente) {
+    public BolsaPuntos(Long id, Date fechaAsignacion, Date fechaCaducidad, Integer puntajesAsignado, Integer puntajeUtilizado, Integer saldoPuntos, Integer montoOperacion, Cliente idCliente) {
         this.id = id;
         this.fechaAsignacion = fechaAsignacion;
         this.fechaCaducidad = fechaCaducidad;
@@ -55,11 +56,11 @@ public class BolsaPuntos {
         this.idCliente = idCliente;
     }
 
-    public Long getIdCliente() {
+    public Cliente getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Long idCliente) {
+    public void setIdCliente(Cliente idCliente) {
         this.idCliente = idCliente;
     }
 
