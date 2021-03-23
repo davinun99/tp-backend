@@ -8,15 +8,18 @@ import java.util.Date;
 public class BolsaPuntos {
     @Id
     @Column(name = "id_bolsa")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Long id;
 
     @Column(name = "fecha_asignacion")
     @Basic(optional = false)
+    @Temporal(TemporalType.DATE)
     private Date fechaAsignacion;
 
     @Column(name = "fecha_caducidad")
     @Basic(optional = false)
+    @Temporal(TemporalType.DATE)
     private Date fechaCaducidad;
 
     @Column(name = "puntajes_asignado")

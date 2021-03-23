@@ -8,6 +8,7 @@ import java.util.Date;
 public class Cliente {
     @Id
     @Column(name = "id_cliente")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private  Long idCliente;
 
@@ -38,6 +39,11 @@ public class Cliente {
     @Column(name = "telefono")
     @Basic(optional = true)
     private  Integer telefono;
+
+    @Column(name = "fecha_nacimiento")
+    @Basic(optional = false)
+    @Temporal(TemporalType.DATE)
+    private Date fechaNacimiento;
 
     public  Cliente(){
 
@@ -129,8 +135,5 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    @Column(name = "fecha_nacimiento")
-    @Basic(optional = false)
-    private Date fechaNacimiento;
 
 }

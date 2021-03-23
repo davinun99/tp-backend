@@ -8,6 +8,7 @@ public class UsoPuntosDetalle {
 
     @Id
     @Column(name="id_detalle")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Long id;
 
