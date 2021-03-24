@@ -11,12 +11,8 @@ public class UsoPuntosCabecera {
     @Basic(optional = false)
     @GeneratedValue(generator = "usoPuntosCabeceraSeq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name="usoPuntosCabeceraSeq", sequenceName = "uso_puntos_cabecera_id_cabecera_seq", allocationSize = 0)
-	private Integer idCliente;
-    
-    @Column(name = "id_concepto")
-    @Basic(optional = false)
-	private Integer idConcepto;
-	
+	private Integer idCabecera;
+
     @Column(name = "puntaje_utilizado")
     @Basic(optional = false)
     private Integer puntajeUtilizado;
@@ -46,11 +42,8 @@ public class UsoPuntosCabecera {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
-    public void setIdConcepto(Integer idConcepto) {
-        this.idConcepto = idConcepto;
+    public void setIdCabecera(Integer idCabecera) {
+        this.idCabecera = idCabecera;
     }
     public void setPuntajeUtilizado(Integer puntajeUtilizado) {
         this.puntajeUtilizado = puntajeUtilizado;
@@ -64,11 +57,8 @@ public class UsoPuntosCabecera {
     public Date getFecha() {
         return fecha;
     }
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-    public Integer getIdConcepto() {
-        return idConcepto;
+    public Integer getIdCabecera() {
+        return idCabecera;
     }
     public Integer getPuntajeUtilizado() {
         return puntajeUtilizado;
