@@ -21,7 +21,7 @@ public class UsoPuntosDetalle {
     private Long idCabecera;
 
     @ManyToOne()
-    @JoinColumn(name = "id_bolsa")
+    @JoinColumn(name = "id_bolsa", referencedColumnName = "id_bolsa")
     @Basic(optional = false)
     private BolsaPuntos idBolsa;
 

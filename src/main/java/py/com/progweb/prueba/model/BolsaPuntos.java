@@ -39,9 +39,9 @@ public class BolsaPuntos {
     private Integer montoOperacion;
 
     @ManyToOne()
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "id_cliente",referencedColumnName = "id_cliente")
     @Basic(optional = false)
-    private  Cliente idCliente;
+    private  Cliente cliente;
 
 
     public  BolsaPuntos(){
@@ -56,15 +56,15 @@ public class BolsaPuntos {
         this.puntajeUtilizado = puntajeUtilizado;
         this.saldoPuntos = saldoPuntos;
         this.montoOperacion = montoOperacion;
-        this.idCliente = idCliente;
+        this.cliente = idCliente;
     }
 
-    public Cliente getIdCliente() {
-        return idCliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(Cliente idCliente) {
-        this.idCliente = idCliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Long getId() {
