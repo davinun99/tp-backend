@@ -22,9 +22,11 @@ create table asignacion_puntos(
 );
 create table vencimiento_puntos(
 	id_vencimiento Serial Primary Key,
+	id_asignacion Integer NOT NULL,
 	fecha_inicio date NOT NULL,
 	fecha_fin date NOT NULL,
-	duracion Integer
+	duracion Integer,
+	FOREIGN KEY (id_asignacion) REFERENCES asignacion_puntos(id_asignacion)
 );
 create table bolsa_puntos(
 	id_bolsa Serial Primary Key,
