@@ -6,8 +6,8 @@ create table cliente (
 	tipo_documento VARCHAR (100) NOT NULL,
 	nacionalidad VARCHAR (100) NOT NULL,
 	email VARCHAR (100) NOT NULL,
-	teléfono Integer ,
-	fecha_nacimiento TIMESTAMP NOT NULL
+	telefono Integer ,
+	fecha_nacimiento date NOT NULL
 );
 create table concepto_puntos(
 	id_concepto Serial Primary Key,
@@ -22,15 +22,15 @@ create table asignacion_puntos(
 );
 create table vencimiento_puntos(
 	id_vencimiento Serial Primary Key,
-	fecha_inicio TIMESTAMP NOT NULL,
-	fecha_fin TIMESTAMP NOT NULL,
+	fecha_inicio date NOT NULL,
+	fecha_fin date NOT NULL,
 	duracion Integer
 );
 create table bolsa_puntos(
 	id_bolsa Serial Primary Key,
 	id_cliente Integer NOT NULL,
-	fecha_asignacion TIMESTAMP NOT NULL,
-	fecha_caducidad TIMESTAMP NOT NULL,
+	fecha_asignacion date NOT NULL,
+	fecha_caducidad date NOT NULL,
 	puntajes_asignado Integer NOT NULL,
 	puntaje_utilizado Integer NOT NULL,
 	saldo_puntos Integer NOT NULL,
@@ -43,7 +43,7 @@ create table uso_puntos_cabecera(
 	id_cliente Integer NOT NULL,
 	id_concepto Integer NOT NULL,
 	puntaje_utilizado Integer NOT NULL,
-	fecha TIMESTAMP NOT NULL,
+	fecha date NOT NULL,
 	FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
 	FOREIGN KEY(id_concepto) REFERENCES concepto_puntos (id_concepto)
 );
