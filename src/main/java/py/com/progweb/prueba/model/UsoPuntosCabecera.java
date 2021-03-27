@@ -1,4 +1,6 @@
 package py.com.progweb.prueba.model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -20,6 +22,7 @@ public class UsoPuntosCabecera {
     @Basic(optional = false)
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fecha;
 
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")

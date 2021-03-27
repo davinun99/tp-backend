@@ -1,5 +1,7 @@
 package py.com.progweb.prueba.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,11 +17,13 @@ public class BolsaPuntos {
     @Column(name = "fecha_asignacion")
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fechaAsignacion;
 
     @Column(name = "fecha_caducidad")
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fechaCaducidad;
 
     @Column(name = "puntajes_asignado")

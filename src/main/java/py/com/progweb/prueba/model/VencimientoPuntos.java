@@ -1,4 +1,6 @@
 package py.com.progweb.prueba.model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -16,11 +18,13 @@ public class VencimientoPuntos{
     @Basic(optional = false)
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fechaInicio;    
 
     @Basic(optional = false)
     @Column(name = "fecha_fin")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fechaFin;    
 
     @Column(name = "duracion")
