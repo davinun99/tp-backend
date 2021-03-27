@@ -27,9 +27,9 @@ public class BolsaPuntosDAO {
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
     public  void add(BolsaPuntos bolsa){
-       bolsa.setSaldoPuntos(100); //
-       bolsa.setPuntajesAsignado(100); //calular
-       bolsa.setFechaAsignacion(new GregorianCalendar(2021, 2, 27).getTime());
+       bolsa.setSaldoPuntos(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //
+       bolsa.setPuntajesAsignado(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //calular
+       bolsa.setFechaAsignacion(new Date());
        bolsa.setFechaCaducidad(new GregorianCalendar(2021, 2, 29).getTime()); // calcular
        bolsa.setPuntajeUtilizado(0);
        Cliente cliente= clienteDAO.get(bolsa.getCliente().getIdCliente());
@@ -38,29 +38,7 @@ public class BolsaPuntosDAO {
        }
        this.em.persist(bolsa);
     }
-    /*
-    public  void add(BolsaPuntos bolsa){
 
-        ;
-        /*
-        //primero calculmos la cantidad de puntos de acuerdo a la operacion
-        //int cantPuntos = ap.getCantPuntos(bolsa.getMontoOperacion());
-                //fechaActual
-        bolsa.setFechaAsignacion();
-        //fechaVencimiento (no se)
-        bolsa.setFechaCaducidad();
-        bolsa.setSaldoPuntos(cantPuntos);
-        bolsa.setPuntajesAsignado(cantPuntos);
-        bolsa.setPuntajeUtilizado(0);
-
-
-        if (cliente != null) { // en caso que recibamos un cliente
-            //primero persisitimos el cliente
-            clienteDAO.add(cliente);
-            this.em.persist(bolsa);
-        }
-    }
-    */
     public void setBolsaPuntos(BolsaPuntos bolsa){
         Date actualDate= new Date();
 
@@ -92,20 +70,7 @@ public class BolsaPuntosDAO {
         }
         return resultSet;
     }
-    /*
-    public List<Cliente> getByExpireDays(int dias) {
-        Date currentDate= new  Date(); //obtengo el dia actual
-        List<Cliente> cliente= new ArrayList<>();
-        Query q = this.em.createQuery("select b from BolsaPuntos b where b.saldoPuntos>0 and b.fechaCaducidad>= :currentDate ");
-        List<BolsaPuntos> bolsaPuntos= q.setParameter("currentDate",currentDate).getResultList(); // obtengo todas las bolsa de puntos
-        for( BolsaPuntos bolsa: bolsaPuntos){
-            int diasDiferencia=(int) ((bolsa.getFechaCaducidad().getTime()-currentDate.getTime())/86400000); // obtengo los dias que me queda para esta bolsa Puntos
-            if (diasDiferencia==dias){
-                if ( !cliente.contains(bolsa.getCliente())) cliente.add(bolsa.getCliente()); //si no esta en mi lista Agrego
-            }
-        }
-        return cliente;
-    }*/
+
 
     public List<Cliente> getByExpireDays(int dias) {
         Date currentDate= new  Date(); //obtengo el dia actual
@@ -120,15 +85,13 @@ public class BolsaPuntosDAO {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha); // Configuramos la fecha que se recibe
         calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
-        System.out.println("Fechaaa");
-        System.out.println(java.sql.Date.valueOf(formatearDateString(calendar.getTime())));
+        //System.out.println("Fechaaa");
+        //System.out.println(java.sql.Date.valueOf(formatearDateString(calendar.getTime())));
         return java.sql.Date.valueOf(formatearDateString(calendar.getTime())); // Devuelve el objeto Date con los nuevos días añadidos
     }
 
     public  String formatearDateString(Date date){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String strDate = dateFormat.format(date);
-        return strDate;
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
 }
