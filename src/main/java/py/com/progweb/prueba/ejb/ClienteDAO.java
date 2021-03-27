@@ -70,4 +70,18 @@ public class ClienteDAO {
         }
         return clienteNameUserName;
     }
+
+    /* Esta funcion solo actualiza el nombre y apellido*/
+    public void updateCliente(Cliente newCliente) {
+        Cliente cliente= this.em.find(Cliente.class,newCliente.getIdCliente());
+
+        if (cliente!= null){
+            if (newCliente.getNombre()!=null){
+                cliente.setNombre(newCliente.getNombre());
+            }
+            if (newCliente.getApellido()!=null){
+                cliente.setApellido(newCliente.getApellido());
+            }
+        }
+    }
 }

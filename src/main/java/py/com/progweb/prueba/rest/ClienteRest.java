@@ -71,5 +71,12 @@ public class ClienteRest {
         return Response.ok("Usuario: "+ clienteEliminado+ " Eliminado Correctamente").build();
     }
 
+    @PUT
+    @Path("acutalizar")
+    public Response updateClienteRest(Cliente cliente){
+        clienteDAO.updateCliente(cliente);
+        return Response.ok("Cliente Actualizado Correctamente").build();
+    }
+
 }
 
