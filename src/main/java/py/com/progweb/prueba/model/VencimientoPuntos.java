@@ -26,17 +26,11 @@ public class VencimientoPuntos{
     @Column(name = "duracion")
     @Basic(optional = false)
     private Integer duracion;
-    
-    @JoinColumn(name = "id_asignacion", referencedColumnName = "id_asignacion")
-    @ManyToOne(optional=false)
-    private AsignacionPuntos asignacionPuntos;
 
     public VencimientoPuntos(){
 
     }
-    public void setAsignacionPuntos(AsignacionPuntos asignacionPuntos) {
-        this.asignacionPuntos = asignacionPuntos;
-    }
+
     public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
@@ -48,9 +42,6 @@ public class VencimientoPuntos{
     }
     public void setIdVencimiento(Integer idVencimiento) {
         this.idVencimiento = idVencimiento;
-    }
-    public AsignacionPuntos getAsignacionPuntos() {
-        return asignacionPuntos;
     }
     public Integer getDuracion() {
         return duracion;

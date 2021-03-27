@@ -19,7 +19,7 @@ public class ClienteDAO {
     @PersistenceContext(unitName = "laboratiorioPersistanceUnit")
     private  EntityManager em;
     // funcio para agregar un nuevo cliente
-    public  void add(Cliente cliente){
+    public void add(Cliente cliente){
         this.em.persist(cliente);
     }
     //funcion para listar todos los clientes
