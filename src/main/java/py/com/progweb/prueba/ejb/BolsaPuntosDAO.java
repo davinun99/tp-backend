@@ -9,10 +9,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 @Stateless
 public class BolsaPuntosDAO {
@@ -20,28 +20,23 @@ public class BolsaPuntosDAO {
     private EntityManager em;
     @Inject
     private ClienteDAO clienteDAO;
+
+    @Inject
+    AsignacionDAO asignacionDAO;
+
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+
     public  void add(BolsaPuntos bolsa){
-        Cliente cliente= bolsa.getCliente();
-
-        ;
-        /*
-        //primero calculmos la cantidad de puntos de acuerdo a la operacion
-        //int cantPuntos = ap.getCantPuntos(bolsa.getMontoOperacion());
-                //fechaActual
-        bolsa.setFechaAsignacion();
-        //fechaVencimiento (no se)
-        bolsa.setFechaCaducidad();
-        bolsa.setSaldoPuntos(cantPuntos);
-        bolsa.setPuntajesAsignado(cantPuntos);
-        bolsa.setPuntajeUtilizado(0);
-        */
-
-        if (cliente != null) { // en caso que recibamos un cliente
-            //primero persisitimos el cliente
-            clienteDAO.add(cliente);
-            this.em.persist(bolsa);
-        }
+       bolsa.setSaldoPuntos(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //
+       bolsa.setPuntajesAsignado(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //calular
+       bolsa.setFechaAsignacion(new Date());
+       bolsa.setFechaCaducidad(new GregorianCalendar(2021, 2, 29).getTime()); // calcular
+       bolsa.setPuntajeUtilizado(0);
+       Cliente cliente= clienteDAO.get(bolsa.getCliente().getIdCliente());
+       if (cliente!=null){
+           bolsa.setCliente(cliente);
+       }
+       this.em.persist(bolsa);
     }
 
     public void setBolsaPuntos(BolsaPuntos bolsa){
@@ -57,10 +52,10 @@ public class BolsaPuntosDAO {
     }
 
     //Optenemos las bolsaPuntos por Cliente
-    public  BolsaPuntos getByClienteId(Long id_cliente){
+    public List<BolsaPuntos>  getByClienteId(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
-        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente=cliente");
-        return (BolsaPuntos) q.getSingleResult();
+        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente");
+        return (List<BolsaPuntos>) q.setParameter("cliente",cliente).getResultList();
     }
 
     //obtenemos todas las Bolsa de puntos cuyo SaldoPuntos estre entre el rango de LimiteInferior y limiteSuperior
@@ -74,6 +69,29 @@ public class BolsaPuntosDAO {
             }
         }
         return resultSet;
+    }
+
+
+    public List<Cliente> getByExpireDays(int dias) {
+        Date currentDate= new  Date(); //obtengo el dia actual
+        List<Cliente> cliente= new ArrayList<>();
+        Date expireDate = sumarRestarDiasFecha(currentDate,dias);
+        Query q = this.em.createQuery("select distinct b.cliente from BolsaPuntos b where b.saldoPuntos>0 and b.fechaCaducidad = :expireDate ");
+        List<Cliente> clientes= (List<Cliente>) q.setParameter("expireDate",expireDate).getResultList(); // obtengo todas las bolsa de puntos
+        return clientes;
+    }
+
+    public Date sumarRestarDiasFecha(Date fecha, int dias){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
+        //System.out.println("Fechaaa");
+        //System.out.println(java.sql.Date.valueOf(formatearDateString(calendar.getTime())));
+        return java.sql.Date.valueOf(formatearDateString(calendar.getTime())); // Devuelve el objeto Date con los nuevos días añadidos
+    }
+
+    public  String formatearDateString(Date date){
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
 }

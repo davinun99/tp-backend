@@ -57,8 +57,10 @@ public class ClienteRest {
     }
     @POST
     @Path("/")
-    public  Response agregar(Cliente cliente){
-        this.clienteDAO.add(cliente);
+    public  Response agregar(List<Cliente> clientes){
+        for (Cliente cliente : clientes){
+            this.clienteDAO.add(cliente);
+        }
         return Response.ok().build();
     }
 }

@@ -1,6 +1,9 @@
 package py.com.progweb.prueba.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -43,6 +46,7 @@ public class Cliente {
     @Column(name = "fecha_nacimiento")
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date fechaNacimiento;
 
     public  Cliente(){
@@ -57,7 +61,9 @@ public class Cliente {
         this.nacionalidad = nacionalidad;
         this.email = email;
         this.telefono = telefono;
-        this.fechaNacimiento = fechaNacimiento;
+        //String dateString= new SimpleDateFormat("yyyy-MM-dd").format(this.fechaNacimiento);
+        //this.fechaNacimiento = java.sql.Date.valueOf(dateString);
+        this.fechaNacimiento=fechaNacimiento;
     }
 
 
@@ -100,7 +106,9 @@ public class Cliente {
     }
 
     public Date getFechaNacimiento() {
-        return fechaNacimiento;
+        //String dateString= new SimpleDateFormat("yyyy-MM-dd").format(this.fechaNacimiento);
+        //return java.sql.Date.valueOf(dateString);
+        return this.fechaNacimiento;
     }
 
     public void setNombre(String nombre) {

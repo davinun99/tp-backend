@@ -1,5 +1,7 @@
 package py.com.progweb.prueba.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class UsoPuntosDetalle {
 
     @Column(name="puntaje_utilizado")
     @Basic(optional = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private  Integer puntajeUtilizado;
 
     @Column(name="id_cabecera")
