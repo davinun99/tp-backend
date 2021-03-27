@@ -25,7 +25,7 @@ public class AsignacionDAO {
 
 
     public Integer getReglaByMonto( Integer monto ){
-        Query q= this.em.createQuery("select monto / c.monto from AsignacionPuntos c where monto between limite_inferior and limite_superior");
+        Query q= this.em.createQuery("select monto / c.monto from AsignacionPuntos c  where c.monto between :limite_inferior and :limite_superior");
         return  (Integer) q.getSingleResult();
     }
 }
