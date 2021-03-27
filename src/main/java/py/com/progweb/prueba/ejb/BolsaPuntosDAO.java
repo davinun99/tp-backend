@@ -24,26 +24,27 @@ public class BolsaPuntosDAO {
     @Inject
     AsignacionDAO asignacionDAO;
 
+    @Inject
+    VencimientoDAO vencimientoDAO;
+
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
     public  void add(BolsaPuntos bolsa){
-       bolsa.setSaldoPuntos(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //
-       bolsa.setPuntajesAsignado(asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion())); //calular
-       bolsa.setFechaAsignacion(new Date());
-       bolsa.setFechaCaducidad(new GregorianCalendar(2021, 2, 29).getTime()); // calcular
-       bolsa.setPuntajeUtilizado(0);
+
+       Date  currentDate=new Date(); //obtengo la fecha actual
+       Integer duracion=vencimientoDAO.getDuracion(formatearDateString(currentDate));
+       Integer cantPuntos = asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion());
+
+       bolsa.setSaldoPuntos(cantPuntos); // mi saldo de puntos es igual a puntaAsignado al crear una nueva Bolsa
+       bolsa.setPuntajesAsignado(cantPuntos); //le Cargo cantPuntos
+       bolsa.setFechaAsignacion(currentDate);//La fecha es la fecha Actualidad
+       bolsa.setFechaCaducidad(sumarRestarDiasFecha(currentDate,duracion.intValue())); // calculo la fecha de caducidad de acurdo a la duracion de mi puntaje
+       bolsa.setPuntajeUtilizado(0); //No use ningun punto aun
        Cliente cliente= clienteDAO.get(bolsa.getCliente().getIdCliente());
        if (cliente!=null){
            bolsa.setCliente(cliente);
        }
        this.em.persist(bolsa);
-    }
-
-    public void setBolsaPuntos(BolsaPuntos bolsa){
-        Date actualDate= new Date();
-
-        bolsa.setFechaAsignacion(actualDate);
-        bolsa.setFechaCaducidad(actualDate);
     }
 
     public List<BolsaPuntos> getAll(){
@@ -85,8 +86,8 @@ public class BolsaPuntosDAO {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha); // Configuramos la fecha que se recibe
         calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
-        //System.out.println("Fechaaa");
-        //System.out.println(java.sql.Date.valueOf(formatearDateString(calendar.getTime())));
+        System.out.println("Fechaaa");
+        System.out.println(java.sql.Date.valueOf(formatearDateString(calendar.getTime())));
         return java.sql.Date.valueOf(formatearDateString(calendar.getTime())); // Devuelve el objeto Date con los nuevos días añadidos
     }
 

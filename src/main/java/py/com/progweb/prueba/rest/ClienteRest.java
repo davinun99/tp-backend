@@ -63,5 +63,13 @@ public class ClienteRest {
         }
         return Response.ok().build();
     }
+
+    @DELETE
+    @Path("eliminar/{id_cliente}")
+    public  Response deleteClienteRest(@PathParam("id_cliente") Long id_cliente){
+        String clienteEliminado=clienteDAO.deleteCliente(id_cliente);
+        return Response.ok("Usuario: "+ clienteEliminado+ " Eliminado Correctamente").build();
+    }
+
 }
 

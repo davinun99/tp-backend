@@ -34,14 +34,16 @@ public class ClienteDAO {
     }
 
     public List<Cliente> getClienteByName(String nombre) {
-        Query q= this.em.createQuery("select c from Cliente c where LOWER(c.nombre) = :nombre");
+        nombre = nombre + "%";
+        Query q= this.em.createQuery("select c from Cliente c where LOWER(c.nombre) like :nombre");
         System.out.println("Aca explota en el select");
         return (List<Cliente>) q.setParameter("nombre", nombre).getResultList();
 
     }
 
     public List<Cliente> getClienteByLastName(String apellido) {
-        Query q= this.em.createQuery("select c from Cliente c where LOWER(c.apellido) = :apellido");
+        apellido = apellido + "%";
+        Query q= this.em.createQuery("select c from Cliente c where LOWER(c.apellido) like :apellido");
         return (List<Cliente>)q.setParameter("apellido", apellido).getResultList();
     }
 
@@ -60,4 +62,12 @@ public class ClienteDAO {
         return  (List<Cliente>) q.setParameter("birth",birth).getResultList();
     }
 
+    public String deleteCliente(Long id_cliente) {
+        Cliente cliente=this.em.find(Cliente.class,id_cliente);
+        String clienteNameUserName= cliente.getNombre()+" "+ cliente.getApellido();
+        if (cliente!=null){
+            this.em.remove(cliente);
+        }
+        return clienteNameUserName;
+    }
 }

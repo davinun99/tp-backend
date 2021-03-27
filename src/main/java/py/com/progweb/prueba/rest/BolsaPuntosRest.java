@@ -57,4 +57,5 @@ public class BolsaPuntosRest {
     public Response getByExpireDaysRest(@PathParam("dias") int dias){
         return Response.ok(bolsaPuntosDAO.getByExpireDays(dias)).build();
     }
+
 }
