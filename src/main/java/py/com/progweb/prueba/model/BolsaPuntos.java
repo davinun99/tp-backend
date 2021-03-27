@@ -26,7 +26,7 @@ public class BolsaPuntos {
     @Basic(optional = false)
     private  Integer puntajesAsignado;
 
-    @Column(name = "puntajes_utilizado")
+    @Column(name = "puntaje_utilizado")
     @Basic(optional = false)
     private  Integer puntajeUtilizado;
 

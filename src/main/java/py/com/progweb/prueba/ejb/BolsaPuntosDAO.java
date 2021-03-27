@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,9 +21,26 @@ public class BolsaPuntosDAO {
     private EntityManager em;
     @Inject
     private ClienteDAO clienteDAO;
+
+    @Inject
+    AsignacionDAO asignacionDAO;
+
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+
     public  void add(BolsaPuntos bolsa){
-        Cliente cliente= bolsa.getCliente();
+       bolsa.setSaldoPuntos(100); //
+       bolsa.setPuntajesAsignado(100); //calular
+       bolsa.setFechaAsignacion(new Date());
+       bolsa.setFechaCaducidad(new Date()); // calcular
+       bolsa.setPuntajeUtilizado(0);
+       Cliente cliente= clienteDAO.get(bolsa.getCliente().getIdCliente());
+       if (cliente!=null){
+           bolsa.setCliente(cliente);
+       }
+       this.em.persist(bolsa);
+    }
+    /*
+    public  void add(BolsaPuntos bolsa){
 
         ;
         /*
@@ -35,7 +53,7 @@ public class BolsaPuntosDAO {
         bolsa.setSaldoPuntos(cantPuntos);
         bolsa.setPuntajesAsignado(cantPuntos);
         bolsa.setPuntajeUtilizado(0);
-        */
+
 
         if (cliente != null) { // en caso que recibamos un cliente
             //primero persisitimos el cliente
@@ -43,7 +61,7 @@ public class BolsaPuntosDAO {
             this.em.persist(bolsa);
         }
     }
-
+    */
     public void setBolsaPuntos(BolsaPuntos bolsa){
         Date actualDate= new Date();
 
@@ -57,10 +75,10 @@ public class BolsaPuntosDAO {
     }
 
     //Optenemos las bolsaPuntos por Cliente
-    public  BolsaPuntos getByClienteId(Long id_cliente){
+    public List<BolsaPuntos>  getByClienteId(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
-        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente=cliente");
-        return (BolsaPuntos) q.getSingleResult();
+        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente");
+        return (List<BolsaPuntos>) q.setParameter("cliente",cliente).getResultList();
     }
 
     //obtenemos todas las Bolsa de puntos cuyo SaldoPuntos estre entre el rango de LimiteInferior y limiteSuperior
@@ -76,4 +94,17 @@ public class BolsaPuntosDAO {
         return resultSet;
     }
 
+    public List<Cliente> getByExpireDays(int dias) {
+        Date currentDate= new  Date(); //obtengo el dia actual
+        List<Cliente> cliente= new ArrayList<>();
+        Query q = this.em.createQuery("select b from BolsaPuntos b where b.saldoPuntos>0 and b.fechaCaducidad>= :currentDate ");
+        List<BolsaPuntos> bolsaPuntos= q.setParameter("currentDate",currentDate).getResultList(); // obtengo todas las bolsa de puntos
+        for( BolsaPuntos bolsa: bolsaPuntos){
+            int diasDiferencia=(int) ((bolsa.getFechaCaducidad().getTime()-currentDate.getTime())/86400000); // obtengo los dias que me queda para esta bolsa Puntos
+            if (diasDiferencia==dias){
+                if ( !cliente.contains(bolsa.getCliente())) cliente.add(bolsa.getCliente()); //si no esta en mi lista Agrego
+            }
+        }
+        return cliente;
+    }
 }
