@@ -55,7 +55,7 @@ public class BolsaPuntosDAO {
     //Optenemos las bolsaPuntos por Cliente
     public List<BolsaPuntos>  getByClienteId(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
-        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente");
+        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente order by fechaAsignacion asc");
         return (List<BolsaPuntos>) q.setParameter("cliente",cliente).getResultList();
     }
 
@@ -81,7 +81,22 @@ public class BolsaPuntosDAO {
         List<Cliente> clientes= (List<Cliente>) q.setParameter("expireDate",expireDate).getResultList(); // obtengo todas las bolsa de puntos
         return clientes;
     }
-
+    public void usarPuntos(BolsaPuntos bolsaPuntos, Integer puntosAUsar) {
+        BolsaPuntos bolsa = this.em.find(BolsaPuntos.class,bolsaPuntos.getId());
+        if( bolsa.getSaldoPuntos() <= puntosAUsar){
+            System.out.println("Error, el puntaje a utilizar es mayor al saldo de la bolsa");
+        }else{
+            Integer saldo = bolsa.getSaldoPuntos();
+            Integer puntajeUtilizado = bolsa.getPuntajeUtilizado();
+            bolsa.setPuntajeUtilizado( puntajeUtilizado + puntosAUsar );
+            bolsa.setSaldoPuntos( saldo - puntosAUsar );
+        }
+    }
+    public Integer getTotalDePuntosByCliente(Long id_cliente){
+        Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
+        Query q= em.createQuery("select count(b.saldoPuntos) from BolsaPuntos b where  b.cliente= :cliente");
+        return (Integer) q.setParameter("cliente",cliente).getSingleResult();
+    }
     public Date sumarRestarDiasFecha(Date fecha, int dias){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha); // Configuramos la fecha que se recibe

@@ -21,7 +21,7 @@ public class UsoPuntosDetalle {
 
     @Column(name="id_cabecera")
     @Basic(optional = false)
-    private Long idCabecera;
+    private UsoPuntosCabecera cabecera;
 
     @ManyToOne()
     @JoinColumn(name = "id_bolsa", referencedColumnName = "id_bolsa")
@@ -31,10 +31,10 @@ public class UsoPuntosDetalle {
     public UsoPuntosDetalle(){
 
     }
-    public UsoPuntosDetalle(Long id, Integer puntajeUtilizado, Long idCabecera, BolsaPuntos idBolsa) {
+    public UsoPuntosDetalle(Long id, Integer puntajeUtilizado, UsoPuntosCabecera cabecera, BolsaPuntos idBolsa) {
         this.id = id;
         this.puntajeUtilizado = puntajeUtilizado;
-        this.idCabecera = idCabecera;
+        this.cabecera = cabecera;
         this.idBolsa = idBolsa;
     }
 
@@ -54,12 +54,12 @@ public class UsoPuntosDetalle {
         this.puntajeUtilizado = puntajeUtilizado;
     }
 
-    public Long getIdCabecera() {
-        return idCabecera;
+    public UsoPuntosCabecera getCabecera() {
+        return cabecera;
     }
 
-    public void setIdCabecera(Long idCabecera) {
-        this.idCabecera = idCabecera;
+    public void setCabecera(UsoPuntosCabecera cabecera) {
+        this.cabecera = cabecera;
     }
 
     public BolsaPuntos getIdBolsa() {
