@@ -26,6 +26,11 @@ public class UsoPuntosRest {
         return Response.ok().build();
     }
     @GET
+    @Path("/")
+    public Response getAll( ){
+        return Response.ok(usoPuntosDAO.getAll()).build();
+    }
+    @GET
     @Path("/concepto/{idConcepto}")
     public Response getUsoByConcepto(@PathParam("idConcepto") Integer idConcepto){
         return Response.ok(usoPuntosDAO.getByConcepto(idConcepto)).build();

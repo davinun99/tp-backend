@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 @Stateless
 public class ConceptoDAO {
@@ -13,6 +14,10 @@ public class ConceptoDAO {
     private EntityManager em;
     public void add(ConceptoPuntos conceptoPuntos){
         em.persist(conceptoPuntos);
+    }
+    public List<ConceptoPuntos> getAll(){
+        Query q = this.em.createQuery("select c from ConceptoPuntos c");
+        return (List<ConceptoPuntos>) q.getResultList();
     }
     public ConceptoPuntos getById(Integer idConcepto){
         Query q = this.em.createQuery("select c from ConceptoPuntos c where c.idConcepto = :idConcepto");

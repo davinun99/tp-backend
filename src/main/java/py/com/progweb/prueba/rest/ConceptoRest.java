@@ -23,6 +23,13 @@ public class ConceptoRest {
         }
         return Response.ok().build();
     }
+
+    @GET
+    @Path("/")
+    public Response getAll(){
+        return Response.ok(conceptoDAO.getAll()).build();
+    }
+
     @GET
     @Path("/{idConcepto}")
     public Response getConceptoById(@PathParam("idConcepto") Integer idConcepto){

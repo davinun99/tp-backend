@@ -26,6 +26,12 @@ public class AsignacionRest {
         return Response.ok().build();
     }
     @GET
+    @Path("/")
+    public Response getAll(){
+        return Response.ok(asignacionDao.getAll()).build() ;
+    }
+
+    @GET
     @Path("/regla/{monto}")
     public Response getReglaByMonto( @PathParam("monto") Integer monto ){
         String respuesta = " {\"monto\": " +  asignacionDao.getReglaByMonto(monto) + " }";
