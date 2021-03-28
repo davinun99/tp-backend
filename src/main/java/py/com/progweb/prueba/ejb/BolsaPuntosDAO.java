@@ -95,4 +95,8 @@ public class BolsaPuntosDAO {
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
+    public  List<BolsaPuntos> getBolsaPuntosVencidos(Date currentDate){
+        Query q= this.em.createQuery("select b from BolsaPuntos b where b.fechaCaducidad< :currentDate");
+        return (List<BolsaPuntos>) q.setParameter("currentDate",currentDate).getResultList();
+    }
 }
