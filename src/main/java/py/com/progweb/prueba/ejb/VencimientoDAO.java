@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class VencimientoDAO {
@@ -15,6 +16,10 @@ public class VencimientoDAO {
 
     public void add(VencimientoPuntos vencimientoPuntos){
         em.persist(vencimientoPuntos);
+    }
+    public List<VencimientoPuntos> getAll(){
+        Query q = this.em.createQuery("select v from VencimientoPuntos v");
+        return  (List<VencimientoPuntos>) q.getResultList();
     }
     public Integer getDuracion(String fecha){
         java.util.Date fechaDate= java.sql.Date.valueOf(fecha);

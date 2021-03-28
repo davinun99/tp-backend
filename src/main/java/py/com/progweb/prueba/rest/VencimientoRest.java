@@ -24,6 +24,13 @@ public class VencimientoRest {
         }
         return Response.ok().build();
     }
+
+    @GET
+    @Path("/")
+    public Response getAll( ){
+        return Response.ok(vencimientoDAO.getAll()).build();
+    }
+
     @GET
     @Path("/duracion/{fecha}")
     public Response getDuracionByFecha(@PathParam("fecha") String fecha){

@@ -27,6 +27,10 @@ public class UsoPuntosDAO {
     public void addDetalle(UsoPuntosDetalle usoPuntosDetalle){
         em.persist(usoPuntosDetalle);
     }
+    public List<UsoPuntosCabecera> getAll(){
+        Query q = em.createQuery("select u from UsoPuntosCabecera u");
+        return (List<UsoPuntosCabecera>)q.getResultList();
+    }
     public List<UsoPuntosCabecera> getByConcepto(Integer idConcepto){
         ConceptoPuntos concepto = this.em.find(ConceptoPuntos.class, idConcepto);
         Query q = em.createQuery("select u from UsoPuntosCabecera u where u.conceptoPuntos = :concepto");
