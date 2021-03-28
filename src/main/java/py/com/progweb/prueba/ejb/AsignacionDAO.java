@@ -1,6 +1,7 @@
 package py.com.progweb.prueba.ejb;
 
 import py.com.progweb.prueba.model.AsignacionPuntos;
+import py.com.progweb.prueba.model.VencimientoPuntos;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,5 +28,27 @@ public class AsignacionDAO {
     public Integer getReglaByMonto( Integer monto ){
         Query q= this.em.createQuery("select :monto / c.monto from AsignacionPuntos c where :monto between c.limiteInferior and c.limiteSuperior");
         return  (Integer) q.setParameter("monto", monto).getSingleResult();
+    }
+
+    public void deleteAsignacion(Long id_asignacion) {
+        AsignacionPuntos asignacionPuntos= this.em.find(AsignacionPuntos.class,id_asignacion);
+        if (asignacionPuntos!=null) {
+            this.em.remove(asignacionPuntos);
+        }
+    }
+
+    public void updateVencimiento(AsignacionPuntos asignacionPuntos) {
+        AsignacionPuntos asignacionPuntosOriginal= this.em.find(AsignacionPuntos.class,asignacionPuntos.getIdAsignacion());
+        if (asignacionPuntosOriginal!=null){
+            if(asignacionPuntos.getLimiteInferior()!=null){
+                asignacionPuntosOriginal.setLimiteInferior(asignacionPuntos.getLimiteInferior());
+            }
+            if(asignacionPuntos.getLimiteSuperior()!=null){
+                asignacionPuntosOriginal.setLimiteSuperior(asignacionPuntos.getLimiteSuperior());
+            }
+            if(asignacionPuntos.getMonto()!=null){
+                asignacionPuntosOriginal.setMonto(asignacionPuntos.getMonto());
+            }
+        }
     }
 }

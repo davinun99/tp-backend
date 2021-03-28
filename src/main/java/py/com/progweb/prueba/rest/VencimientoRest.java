@@ -29,13 +29,13 @@ public class VencimientoRest {
     }
     @DELETE
     @Path("eliminar/{id_vencimiento}")
-    public  Response deleteClienteRest(@PathParam("id_vencimiento") Long id_vencimiento){
+    public  Response deleteVencimientoRest(@PathParam("id_vencimiento") Long id_vencimiento){
         vencimientoDAO.deleteVencimiento(id_vencimiento);
         return Response.ok("Vencimiento Eliminado Correctamente").build();
     }
     @PUT
     @Path("acutalizar")
-    public Response updateClienteRest(VencimientoPuntos vencimientoPuntos){
+    public Response updateVencimientoRest(VencimientoPuntos vencimientoPuntos){
         vencimientoDAO.updateVencimiento(vencimientoPuntos);
         return Response.ok("Vencimiento Actualizado Correctamente").build();
     }
