@@ -7,6 +7,7 @@ import py.com.progweb.prueba.model.VencimientoPuntos;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("asignacion")
 @Consumes("application/json")
@@ -18,8 +19,10 @@ public class AsignacionRest {
 
     @POST
     @Path("/")
-    public Response agregar(AsignacionPuntos asignacionPuntos){
-        this.asignacionDao.add(asignacionPuntos);
+    public Response agregar(List<AsignacionPuntos> asignacionPuntos){
+        for(AsignacionPuntos asignacionPunto:asignacionPuntos){
+            this.asignacionDao.add(asignacionPunto);
+        }
         return Response.ok().build();
     }
     @GET

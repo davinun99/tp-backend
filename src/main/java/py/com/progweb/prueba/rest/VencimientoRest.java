@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 @Path("vencimiento")
 @Consumes("application/json")
@@ -17,8 +18,10 @@ public class VencimientoRest {
     private VencimientoDAO vencimientoDAO;
     @POST
     @Path("/")
-    public Response agregar(VencimientoPuntos vencimientoPuntos){
-        this.vencimientoDAO.add(vencimientoPuntos);
+    public Response agregar(List<VencimientoPuntos> vencimientoPuntos){
+        for (VencimientoPuntos vencimientoPunto:vencimientoPuntos){
+            this.vencimientoDAO.add(vencimientoPunto);
+        }
         return Response.ok().build();
     }
     @GET
