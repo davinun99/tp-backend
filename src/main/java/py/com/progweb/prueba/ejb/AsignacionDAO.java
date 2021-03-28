@@ -2,6 +2,7 @@ package py.com.progweb.prueba.ejb;
 
 import py.com.progweb.prueba.model.AsignacionPuntos;
 import py.com.progweb.prueba.model.VencimientoPuntos;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,14 +31,17 @@ public class AsignacionDAO {
         return  (Integer) q.setParameter("monto", monto).getSingleResult();
     }
 
-    public void deleteAsignacion(Integer id_asignacion) {
+    public Integer deleteAsignacion(Integer id_asignacion) {
         AsignacionPuntos asignacionPuntos= this.em.find(AsignacionPuntos.class,id_asignacion);
         if (asignacionPuntos!=null) {
             this.em.remove(asignacionPuntos);
+            return CodigosDeEstado.SUCCESS;
+        }else{
+            return CodigosDeEstado.NOT_FOUND;
         }
     }
 
-    public void updateVencimiento(AsignacionPuntos asignacionPuntos) {
+    public Integer updateVencimiento(AsignacionPuntos asignacionPuntos) {
         AsignacionPuntos asignacionPuntosOriginal= this.em.find(AsignacionPuntos.class,asignacionPuntos.getIdAsignacion());
         if (asignacionPuntosOriginal!=null){
             if(asignacionPuntos.getLimiteInferior()!=null){
@@ -49,6 +53,9 @@ public class AsignacionDAO {
             if(asignacionPuntos.getMonto()!=null){
                 asignacionPuntosOriginal.setMonto(asignacionPuntos.getMonto());
             }
+            return CodigosDeEstado.SUCCESS;
+        }else{
+            return CodigosDeEstado.NOT_FOUND;
         }
     }
 }

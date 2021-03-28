@@ -3,6 +3,7 @@ package py.com.progweb.prueba.rest;
 import py.com.progweb.prueba.ejb.AsignacionDAO;
 import py.com.progweb.prueba.model.AsignacionPuntos;
 import py.com.progweb.prueba.model.VencimientoPuntos;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -39,14 +40,34 @@ public class AsignacionRest {
     }
     @DELETE
     @Path("eliminar/{id_asignacion}")
-    public  Response deleteAsignacionRest(@PathParam("id_asignacion") Integer id_asignacion){
-        asignacionDao.deleteAsignacion(id_asignacion);
-        return Response.ok("Regla Asignacion Eliminado Correctamente").build();
+    public Response deleteAsignacionRest(@PathParam("id_asignacion") Integer id_asignacion){
+        Integer status = asignacionDao.deleteAsignacion(id_asignacion);
+        Response response = Response.status(400).build();
+        try{
+            if (status == CodigosDeEstado.SUCCESS) {
+                response = Response.ok("Regla Asignacion Eliminado Correctamente").build();
+            } else if (status == CodigosDeEstado.NOT_FOUND) {
+                response = Response.status(404).build();
+            }
+        }catch (Exception ex){
+            response = Response.serverError().build();
+        }
+        return response;
     }
     @PUT
     @Path("actualizar")
     public Response updateAsignacionRest(AsignacionPuntos asignacionPuntos){
-        asignacionDao.updateVencimiento(asignacionPuntos);
-        return Response.ok("Regal de Asignacion Actualizado Correctamente").build();
+        Integer status = asignacionDao.updateVencimiento(asignacionPuntos);
+        Response respuesta = Response.status(400).build();
+        try {
+            if (status == CodigosDeEstado.SUCCESS) {
+                respuesta = Response.ok("Regal de Asignacion Actualizado Correctamente").build();
+            } else if (status == CodigosDeEstado.NOT_FOUND) {
+                respuesta = Response.status(404).build();
+            }
+        }catch (Exception ex){
+            respuesta = Response.serverError().build();
+        }
+        return respuesta;
     }
 }

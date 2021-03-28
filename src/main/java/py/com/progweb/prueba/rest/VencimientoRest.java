@@ -3,6 +3,7 @@ package py.com.progweb.prueba.rest;
 import py.com.progweb.prueba.ejb.VencimientoDAO;
 import py.com.progweb.prueba.model.Cliente;
 import py.com.progweb.prueba.model.VencimientoPuntos;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -40,13 +41,33 @@ public class VencimientoRest {
     @DELETE
     @Path("eliminar/{id_vencimiento}")
     public  Response deleteVencimientoRest(@PathParam("id_vencimiento") Integer id_vencimiento){
-        vencimientoDAO.deleteVencimiento(id_vencimiento);
-        return Response.ok("Vencimiento Eliminado Correctamente").build();
+        Integer status = vencimientoDAO.deleteVencimiento(id_vencimiento);
+        Response respuesta = Response.status(400).build();
+        try{
+            if (status == CodigosDeEstado.SUCCESS) {
+                respuesta = Response.ok("Vencimiento Eliminado Correctamente").build();
+            } else if (status == CodigosDeEstado.NOT_FOUND) {
+                respuesta = Response.status(404).build();
+            }
+        }catch (Exception ex){
+            respuesta = Response.serverError().build();
+        }
+        return respuesta;
     }
     @PUT
     @Path("acutalizar")
     public Response updateVencimientoRest(VencimientoPuntos vencimientoPuntos){
-        vencimientoDAO.updateVencimiento(vencimientoPuntos);
-        return Response.ok("Vencimiento Actualizado Correctamente").build();
+        Integer status = vencimientoDAO.updateVencimiento(vencimientoPuntos);
+        Response respuesta = Response.status(400).build();
+        try{
+            if (status == CodigosDeEstado.SUCCESS) {
+                respuesta = Response.ok("Vencimiento Actualizado Correctamente").build();
+            } else if (status == CodigosDeEstado.NOT_FOUND) {
+                respuesta = Response.status(404).build();
+            }
+        }catch (Exception ex){
+            respuesta = Response.serverError().build();
+        }
+        return respuesta;
     }
 }
