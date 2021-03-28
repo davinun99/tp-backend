@@ -21,4 +21,26 @@ public class VencimientoDAO {
         Query q = this.em.createQuery("select v.duracion from VencimientoPuntos v where :fechaDate between v.fechaInicio and v.fechaFin");
         return  (Integer) q.setParameter("fechaDate", fechaDate).getSingleResult();
     }
+
+    public void deleteVencimiento(Long id_vencimiento) {
+        VencimientoPuntos vencimientoPuntos= this.em.find(VencimientoPuntos.class,id_vencimiento);
+        if (vencimientoPuntos!=null){
+            this.em.remove(vencimientoPuntos);
+        }
+    }
+
+    public void updateVencimiento(VencimientoPuntos vencimientoPuntos) {
+        VencimientoPuntos vencimientoPuntosOriginal= this.em.find(VencimientoPuntos.class,vencimientoPuntos.getIdVencimiento());
+        if (vencimientoPuntosOriginal!=null){
+            if(vencimientoPuntos.getFechaInicio()!=null){
+                vencimientoPuntosOriginal.setFechaInicio(vencimientoPuntos.getFechaInicio());
+            }
+            if(vencimientoPuntos.getFechaFin()!=null){
+                vencimientoPuntosOriginal.setFechaFin(vencimientoPuntos.getFechaFin());
+            }
+            if(vencimientoPuntos.getDuracion()!=null){
+                vencimientoPuntosOriginal.setDuracion(vencimientoPuntos.getDuracion());
+            }
+        }
+    }
 }

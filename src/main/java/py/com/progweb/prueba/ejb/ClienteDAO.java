@@ -74,13 +74,31 @@ public class ClienteDAO {
     /* Esta funcion solo actualiza el nombre y apellido*/
     public void updateCliente(Cliente newCliente) {
         Cliente cliente= this.em.find(Cliente.class,newCliente.getIdCliente());
-
+        //si el cliente existe, recorremos todos los atributos para actualizar
         if (cliente!= null){
             if (newCliente.getNombre()!=null){
                 cliente.setNombre(newCliente.getNombre());
             }
             if (newCliente.getApellido()!=null){
                 cliente.setApellido(newCliente.getApellido());
+            }
+            if (newCliente.getNacionalidad()!=null){
+                cliente.setNacionalidad((newCliente.getNacionalidad()));
+            }
+            if (newCliente.getEmail()!=null){
+                cliente.setEmail((newCliente.getEmail()));
+            }
+            if (newCliente.getCi()!=null){
+                cliente.setCi((newCliente.getCi()));
+            }
+            if (newCliente.getTelefono()!=null){
+                cliente.setTelefono((newCliente.getTelefono()));
+            }
+            if (newCliente.getTipoDocumento()!=null){
+                cliente.setTipoDocumento((newCliente.getTipoDocumento()));
+            }
+            if (newCliente.getFechaNacimiento()!=null){
+                cliente.setFechaNacimiento((newCliente.getFechaNacimiento()));
             }
         }
     }
