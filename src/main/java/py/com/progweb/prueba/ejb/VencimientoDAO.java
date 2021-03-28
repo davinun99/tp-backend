@@ -1,6 +1,7 @@
 package py.com.progweb.prueba.ejb;
 
 import py.com.progweb.prueba.model.VencimientoPuntos;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,14 +28,17 @@ public class VencimientoDAO {
         return  (Integer) q.setParameter("fechaDate", fechaDate).getSingleResult();
     }
 
-    public void deleteVencimiento(Integer id_vencimiento) {
+    public Integer deleteVencimiento(Integer id_vencimiento) {
         VencimientoPuntos vencimientoPuntos= this.em.find(VencimientoPuntos.class,id_vencimiento);
         if (vencimientoPuntos!=null){
             this.em.remove(vencimientoPuntos);
+            return CodigosDeEstado.SUCCESS;
+        }else{
+            return CodigosDeEstado.NOT_FOUND;
         }
     }
 
-    public void updateVencimiento(VencimientoPuntos vencimientoPuntos) {
+    public Integer updateVencimiento(VencimientoPuntos vencimientoPuntos) {
         VencimientoPuntos vencimientoPuntosOriginal= this.em.find(VencimientoPuntos.class,vencimientoPuntos.getIdVencimiento());
         if (vencimientoPuntosOriginal!=null){
             if(vencimientoPuntos.getFechaInicio()!=null){
@@ -46,6 +50,9 @@ public class VencimientoDAO {
             if(vencimientoPuntos.getDuracion()!=null){
                 vencimientoPuntosOriginal.setDuracion(vencimientoPuntos.getDuracion());
             }
+            return CodigosDeEstado.SUCCESS;
+        }else{
+            return CodigosDeEstado.NOT_FOUND;
         }
     }
 }

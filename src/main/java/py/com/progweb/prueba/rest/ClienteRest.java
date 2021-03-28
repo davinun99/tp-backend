@@ -4,6 +4,7 @@ import py.com.progweb.prueba.ejb.ClienteDAO;
 import py.com.progweb.prueba.ejb.PersonaDataAccessObject;
 import py.com.progweb.prueba.model.Cliente;
 import py.com.progweb.prueba.model.Persona;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.inject.Inject;
 import javax.management.Query;
@@ -31,14 +32,22 @@ public class ClienteRest {
     @GET
     @Path("/id/{id_cliente}")
     public Response getClienteRest(@PathParam("id_cliente") Long id_cliente){
-        return Response.ok(clienteDAO.get(id_cliente)).build();
+        Cliente cliente = clienteDAO.get(id_cliente);
+        try {
+            if (cliente != null) {
+                return Response.ok(cliente).build();
+            } else {
+                return Response.status(404).build();
+            }
+        }catch (Exception ex){
+            return Response.serverError().build();
+        }
     }
 
     @GET
     @Path("/name/{nombre_cliente}")
     public Response getClienteByNameRest(@PathParam("nombre_cliente") String nombre ){
         List<Cliente> clientes= this.clienteDAO.getClienteByName(nombre.toLowerCase());
-        System.out.println("Aca explota");
         return  Response.ok(clientes).build();
     }
 
@@ -68,14 +77,33 @@ public class ClienteRest {
     @Path("eliminar/{id_cliente}")
     public  Response deleteClienteRest(@PathParam("id_cliente") Long id_cliente){
         String clienteEliminado=clienteDAO.deleteCliente(id_cliente);
-        return Response.ok("Usuario: "+ clienteEliminado+ " Eliminado Correctamente").build();
+        try {
+            if (clienteEliminado != null) {
+                return Response.ok("Usuario: " + clienteEliminado + " Eliminado Correctamente").build();
+            } else {
+                return Response.status(404).build();
+            }
+        }catch (Exception ex){
+            return Response.serverError().build();
+        }
+
     }
 
     @PUT
-    @Path("acutalizar")
+    @Path("actualizar")
     public Response updateClienteRest(Cliente cliente){
-        clienteDAO.updateCliente(cliente);
-        return Response.ok("Cliente Actualizado Correctamente").build();
+        Integer status = clienteDAO.updateCliente(cliente);
+        Response respuesta = Response.status(400).build();
+        try{
+            if (status == CodigosDeEstado.SUCCESS) {
+                respuesta = Response.ok("Cliente Actualizado Correctamente").build();
+            } else if (status == CodigosDeEstado.NOT_FOUND) {
+                respuesta = Response.status(404).build();
+            }
+        }catch (Exception ex){
+            respuesta = Response.serverError().build();
+        }
+        return respuesta;
     }
 
 }

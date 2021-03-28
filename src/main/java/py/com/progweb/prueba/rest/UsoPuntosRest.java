@@ -20,10 +20,14 @@ public class UsoPuntosRest {
     @POST
     @Path("/")
     public Response utilizarPuntos( List<UsoPuntosCabecera> listUsoPuntos){
-        for (UsoPuntosCabecera usoPuntosCabecera : listUsoPuntos) {
-            this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+        try{
+            for (UsoPuntosCabecera usoPuntosCabecera : listUsoPuntos) {
+                this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+            }
+            return Response.ok().build();
+        }catch (Exception ex){
+            return Response.serverError().build();
         }
-        return Response.ok().build();
     }
     @GET
     @Path("/")
@@ -33,7 +37,11 @@ public class UsoPuntosRest {
     @GET
     @Path("/concepto/{idConcepto}")
     public Response getUsoByConcepto(@PathParam("idConcepto") Integer idConcepto){
-        return Response.ok(usoPuntosDAO.getByConcepto(idConcepto)).build();
+        List<UsoPuntosCabecera> listaUsoPuntos = usoPuntosDAO.getByConcepto(idConcepto);
+        if(listaUsoPuntos == null){
+            return Response.status(404).build();
+        }
+        return Response.ok(listaUsoPuntos).build();
     }
     @GET
     @Path("/fecha/{fecha}")
@@ -43,6 +51,10 @@ public class UsoPuntosRest {
     @GET
     @Path("/cliente/{idCliente}")
     public Response getUsoByCliente(@PathParam("idCliente") Long idCliente){
-        return Response.ok(usoPuntosDAO.getByCliente(idCliente)).build();
+        List<UsoPuntosCabecera> listaUsoPuntos = usoPuntosDAO.getByCliente(idCliente);
+        if(listaUsoPuntos == null){
+            return Response.status(404).build();
+        }
+        return Response.ok(listaUsoPuntos).build();
     }
 }

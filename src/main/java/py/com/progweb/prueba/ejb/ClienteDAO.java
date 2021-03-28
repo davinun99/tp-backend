@@ -2,6 +2,7 @@ package py.com.progweb.prueba.ejb;
 
 import org.omg.CORBA.PUBLIC_MEMBER;
 import py.com.progweb.prueba.model.Cliente;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -64,15 +65,18 @@ public class ClienteDAO {
 
     public String deleteCliente(Long id_cliente) {
         Cliente cliente=this.em.find(Cliente.class,id_cliente);
-        String clienteNameUserName= cliente.getNombre()+" "+ cliente.getApellido();
+        String clienteNameUserName;
         if (cliente!=null){
+            clienteNameUserName= cliente.getNombre()+" "+ cliente.getApellido();
             this.em.remove(cliente);
+        }else{
+            clienteNameUserName = null;
         }
         return clienteNameUserName;
     }
 
     /* Esta funcion solo actualiza el nombre y apellido*/
-    public void updateCliente(Cliente newCliente) {
+    public Integer updateCliente(Cliente newCliente) {
         Cliente cliente= this.em.find(Cliente.class,newCliente.getIdCliente());
         //si el cliente existe, recorremos todos los atributos para actualizar
         if (cliente!= null){
@@ -100,6 +104,9 @@ public class ClienteDAO {
             if (newCliente.getFechaNacimiento()!=null){
                 cliente.setFechaNacimiento((newCliente.getFechaNacimiento()));
             }
+            return CodigosDeEstado.SUCCESS;
+        }else{
+            return CodigosDeEstado.NOT_FOUND;
         }
     }
 }

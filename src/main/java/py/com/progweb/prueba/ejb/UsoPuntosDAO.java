@@ -1,6 +1,7 @@
 package py.com.progweb.prueba.ejb;
 
 import py.com.progweb.prueba.model.*;
+import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -33,6 +34,9 @@ public class UsoPuntosDAO {
     }
     public List<UsoPuntosCabecera> getByConcepto(Integer idConcepto){
         ConceptoPuntos concepto = this.em.find(ConceptoPuntos.class, idConcepto);
+        if(concepto == null){
+            return null;
+        }
         Query q = em.createQuery("select u from UsoPuntosCabecera u where u.conceptoPuntos = :concepto");
         return (List<UsoPuntosCabecera>)q.setParameter("concepto", concepto).getResultList();
     }
@@ -43,14 +47,23 @@ public class UsoPuntosDAO {
     }
     public List<UsoPuntosCabecera> getByCliente(Long idCLiente){
         Cliente cliente = this.em.find(Cliente.class, idCLiente);
+        if(cliente == null){
+            return null;
+        }
         Query q = em.createQuery("select u from UsoPuntosCabecera u where u.cliente = :cliente");
         return (List<UsoPuntosCabecera>)q.setParameter("cliente", cliente).getResultList();
     }
-    public void utilizarPuntos(UsoPuntosCabecera usoPuntosCabecera){
+    public Integer utilizarPuntos(UsoPuntosCabecera usoPuntosCabecera){
         Long idCliente = usoPuntosCabecera.getCliente().getIdCliente();
         Integer idConceptoUso = usoPuntosCabecera.getConceptoPuntos().getIdConcepto();
         Cliente cliente= this.em.find(Cliente.class, idCliente);
+        if(cliente == null){
+            return CodigosDeEstado.NOT_FOUND;
+        }
         ConceptoPuntos conceptoPuntos = this.em.find(ConceptoPuntos.class, idConceptoUso);
+        if(conceptoPuntos == null){
+            return CodigosDeEstado.NOT_FOUND;
+        }
         Integer puntosRequeridos = conceptoPuntos.getPuntosRequeridos();
         UsoPuntosCabecera nuevaCabecera = new UsoPuntosCabecera();//preparo la cabecera con la informacion necesaria
         nuevaCabecera.setCliente(cliente);
@@ -81,12 +94,13 @@ public class UsoPuntosDAO {
                     break;
                 }
             }
+        }else{
+            return CodigosDeEstado.PRECONDITION;
         }
-        //TODO: mandar Mail
         if( cliente.getEmail() != null ){
             sendEmail( cliente.getEmail(), "Has utilizado puntos en " + conceptoPuntos.getDescripcion() );
         }
-
+        return CodigosDeEstado.SUCCESS;
     }
     private void sendEmail(String to, String message) {
         MailEvent event = new MailEvent();
