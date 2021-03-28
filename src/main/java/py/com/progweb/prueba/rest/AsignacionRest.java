@@ -30,12 +30,12 @@ public class AsignacionRest {
     }
     @DELETE
     @Path("eliminar/{id_asignacion}")
-    public  Response deleteAsignacionRest(@PathParam("id_asignacion") Long id_asignacion){
+    public  Response deleteAsignacionRest(@PathParam("id_asignacion") Integer id_asignacion){
         asignacionDao.deleteAsignacion(id_asignacion);
         return Response.ok("Regla Asignacion Eliminado Correctamente").build();
     }
     @PUT
-    @Path("acutalizar")
+    @Path("actualizar")
     public Response updateAsignacionRest(AsignacionPuntos asignacionPuntos){
         asignacionDao.updateVencimiento(asignacionPuntos);
         return Response.ok("Regal de Asignacion Actualizado Correctamente").build();

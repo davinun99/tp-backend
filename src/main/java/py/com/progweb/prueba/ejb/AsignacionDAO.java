@@ -30,7 +30,7 @@ public class AsignacionDAO {
         return  (Integer) q.setParameter("monto", monto).getSingleResult();
     }
 
-    public void deleteAsignacion(Long id_asignacion) {
+    public void deleteAsignacion(Integer id_asignacion) {
         AsignacionPuntos asignacionPuntos= this.em.find(AsignacionPuntos.class,id_asignacion);
         if (asignacionPuntos!=null) {
             this.em.remove(asignacionPuntos);

@@ -29,7 +29,7 @@ public class VencimientoRest {
     }
     @DELETE
     @Path("eliminar/{id_vencimiento}")
-    public  Response deleteVencimientoRest(@PathParam("id_vencimiento") Long id_vencimiento){
+    public  Response deleteVencimientoRest(@PathParam("id_vencimiento") Integer id_vencimiento){
         vencimientoDAO.deleteVencimiento(id_vencimiento);
         return Response.ok("Vencimiento Eliminado Correctamente").build();
     }

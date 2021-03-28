@@ -22,7 +22,7 @@ public class VencimientoDAO {
         return  (Integer) q.setParameter("fechaDate", fechaDate).getSingleResult();
     }
 
-    public void deleteVencimiento(Long id_vencimiento) {
+    public void deleteVencimiento(Integer id_vencimiento) {
         VencimientoPuntos vencimientoPuntos= this.em.find(VencimientoPuntos.class,id_vencimiento);
         if (vencimientoPuntos!=null){
             this.em.remove(vencimientoPuntos);
