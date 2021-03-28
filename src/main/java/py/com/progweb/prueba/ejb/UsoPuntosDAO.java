@@ -82,7 +82,6 @@ public class UsoPuntosDAO {
                 }
             }
         }
-        //TODO: mandar Mail
         if( cliente.getEmail() != null ){
             sendEmail( cliente.getEmail(), "Has utilizado puntos en " + conceptoPuntos.getDescripcion() );
         }
