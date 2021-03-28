@@ -95,7 +95,8 @@ public class BolsaPuntosDAO {
     public Integer getTotalDePuntosByCliente(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
         Query q= em.createQuery("select count(b.saldoPuntos) from BolsaPuntos b where  b.cliente= :cliente");
-        return (Integer) q.setParameter("cliente",cliente).getSingleResult();
+        Long result = (Long)q.setParameter("cliente",cliente).getSingleResult();
+        return result.intValue();
     }
     public Date sumarRestarDiasFecha(Date fecha, int dias){
         Calendar calendar = Calendar.getInstance();

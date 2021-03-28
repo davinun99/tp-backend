@@ -37,7 +37,9 @@ public class UsoPuntosDAO {
         Query q = em.createQuery("select u from UsoPuntosCabecera u where u.cliente = :cliente");
         return (List<UsoPuntosCabecera>)q.setParameter("cliente", cliente).getResultList();
     }
-    public void utilizarPuntos(Long idCliente, Integer idConceptoUso){
+    public void utilizarPuntos(UsoPuntosCabecera usoPuntosCabecera){
+        Long idCliente = usoPuntosCabecera.getCliente().getIdCliente();
+        Integer idConceptoUso = usoPuntosCabecera.getConceptoPuntos().getIdConcepto();
         Cliente cliente= this.em.find(Cliente.class, idCliente);
         ConceptoPuntos conceptoPuntos = this.em.find(ConceptoPuntos.class, idConceptoUso);
         Integer puntosRequeridos = conceptoPuntos.getPuntosRequeridos();

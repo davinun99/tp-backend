@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="agenda")
+@Table(name="uso_puntos_cabecera")
 public class UsoPuntosCabecera {
     @Id
     @Column(name = "id_cabecera")

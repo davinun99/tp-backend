@@ -19,7 +19,8 @@ public class UsoPuntosDetalle {
     @JsonFormat(pattern="yyyy-MM-dd")
     private  Integer puntajeUtilizado;
 
-    @Column(name="id_cabecera")
+    @ManyToOne()
+    @JoinColumn(name = "id_cabecera", referencedColumnName = "id_cabecera")
     @Basic(optional = false)
     private UsoPuntosCabecera cabecera;
 
