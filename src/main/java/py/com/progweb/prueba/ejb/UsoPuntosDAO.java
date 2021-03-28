@@ -3,6 +3,7 @@ package py.com.progweb.prueba.ejb;
 import py.com.progweb.prueba.model.*;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +17,10 @@ public class UsoPuntosDAO {
     private EntityManager em;
     @Inject
     BolsaPuntosDAO bolsaPuntosDAO;
+
+    @Inject
+    private Event<MailEvent> eventProducer;
+
     public void addCabecera(UsoPuntosCabecera usoPuntosCabecera){
         em.persist(usoPuntosCabecera);
     }
@@ -74,6 +79,18 @@ public class UsoPuntosDAO {
             }
         }
         //TODO: mandar Mail
+        if( cliente.getEmail() != null ){
+            sendEmail( cliente.getEmail(), "Has utilizado puntos en " + conceptoPuntos.getDescripcion() );
+        }
+
+    }
+    private void sendEmail(String to, String message) {
+        MailEvent event = new MailEvent();
+        event.setTo(to);
+        event.setSubject("Uso de puntos");
+        event.setMessage(message);
+
+        eventProducer.fire(event); //firing event!
     }
 
 }
