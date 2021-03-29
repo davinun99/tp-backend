@@ -16,6 +16,8 @@ public class VencimientoDAO {
     private EntityManager em;
 
     public void add(VencimientoPuntos vencimientoPuntos){
+        vencimientoPuntos.setFechaInicio(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaInicio(),1));
+        vencimientoPuntos.setFechaFin(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaFin(),1));
         em.persist(vencimientoPuntos);
     }
     public List<VencimientoPuntos> getAll(){
