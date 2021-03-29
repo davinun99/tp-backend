@@ -15,10 +15,14 @@ public class VencimientoDAO {
     @PersistenceContext(unitName = "laboratiorioPersistanceUnit")
     private EntityManager em;
 
-    public void add(VencimientoPuntos vencimientoPuntos){
-        vencimientoPuntos.setFechaInicio(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaInicio(),1));
-        vencimientoPuntos.setFechaFin(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaFin(),1));
-        em.persist(vencimientoPuntos);
+    public boolean add(VencimientoPuntos vencimientoPuntos){
+        if (existeRegla(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaInicio(),1 ) )&& existeRegla(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaFin(), 1))){
+            vencimientoPuntos.setFechaInicio(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaInicio(),1));
+            vencimientoPuntos.setFechaFin(Fecha.sumarRestarDiasFecha(vencimientoPuntos.getFechaFin(),1));
+            em.persist(vencimientoPuntos);
+            return true;
+        }
+        return false;
     }
     public List<VencimientoPuntos> getAll(){
         Query q = this.em.createQuery("select v from VencimientoPuntos v");
@@ -28,6 +32,10 @@ public class VencimientoDAO {
         java.util.Date fechaDate= java.sql.Date.valueOf(fecha);
         Query q = this.em.createQuery("select v.duracion from VencimientoPuntos v where :fechaDate between v.fechaInicio and v.fechaFin");
         return  (Integer) q.setParameter("fechaDate", fechaDate).getSingleResult();
+    }
+    public  Boolean existeRegla(Date fecha){
+        Query q = this.em.createQuery("select v.duracion from VencimientoPuntos v where :fechaDate between v.fechaInicio and v.fechaFin");
+        return q.setParameter("fechaDate",fecha).getResultList().isEmpty();
     }
 
     public Integer deleteVencimiento(Integer id_vencimiento) {

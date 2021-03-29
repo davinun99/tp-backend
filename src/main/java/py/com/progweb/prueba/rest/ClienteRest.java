@@ -37,7 +37,7 @@ public class ClienteRest {
             if (cliente != null) {
                 return Response.ok(cliente).build();
             } else {
-                return Response.status(404).build();
+                return Response.status(404).entity("Cliente no encontrado").build();
             }
         }catch (Exception ex){
             return Response.serverError().build();
@@ -81,7 +81,7 @@ public class ClienteRest {
             if (clienteEliminado != null) {
                 return Response.ok("Usuario: " + clienteEliminado + " Eliminado Correctamente").build();
             } else {
-                return Response.status(404).build();
+                return Response.status(404).entity("Cliente no encontrado").build();
             }
         }catch (Exception ex){
             return Response.serverError().build();
@@ -98,7 +98,7 @@ public class ClienteRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Cliente Actualizado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Cliente no encontrado").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();

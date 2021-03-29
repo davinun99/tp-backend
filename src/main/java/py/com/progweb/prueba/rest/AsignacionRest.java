@@ -22,7 +22,9 @@ public class AsignacionRest {
     @Path("/")
     public Response agregar(List<AsignacionPuntos> asignacionPuntos){
         for(AsignacionPuntos asignacionPunto:asignacionPuntos){
-            this.asignacionDao.add(asignacionPunto);
+            if (!this.asignacionDao.add(asignacionPunto)){
+                return Response.status(404).entity("Regla de Asignacion se solapa con otra").build();
+            }
         }
         return Response.ok().build();
     }
@@ -35,8 +37,12 @@ public class AsignacionRest {
     @GET
     @Path("/regla/{monto}")
     public Response getReglaByMonto( @PathParam("monto") Integer monto ){
-        String respuesta = " {\"monto\": " +  asignacionDao.getReglaByMonto(monto) + " }";
-        return Response.ok(respuesta).build() ;
+        Integer puntosAsignar=asignacionDao.getReglaByMonto(monto);
+        if (puntosAsignar!= null) {
+            String respuesta = " {\"Puntos\": " + puntosAsignar + " }";
+            return Response.ok(respuesta).build();
+        }
+        return Response.status(404).entity("No existe regla para ese Monto").build();
     }
     @DELETE
     @Path("eliminar/{id_asignacion}")
@@ -47,7 +53,7 @@ public class AsignacionRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 response = Response.ok("Regla Asignacion Eliminado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                response = Response.status(404).build();
+                response = Response.status(404).entity("Regla Asignacion No encontrada").build();
             }
         }catch (Exception ex){
             response = Response.serverError().build();
@@ -63,7 +69,7 @@ public class AsignacionRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Regal de Asignacion Actualizado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Regla Asignacion No encontrada").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();

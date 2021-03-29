@@ -2,6 +2,7 @@ package py.com.progweb.prueba.rest;
 
 import py.com.progweb.prueba.ejb.BolsaPuntosDAO;
 import py.com.progweb.prueba.model.BolsaPuntos;
+import py.com.progweb.prueba.model.Cliente;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -34,7 +35,10 @@ public class BolsaPuntosRest {
     @Path("/")
     public  Response add(List<BolsaPuntos> bolsasPuntos){
         for ( BolsaPuntos bolsaPuntos: bolsasPuntos){
-            bolsaPuntosDAO.add(bolsaPuntos);
+            String respuesta=bolsaPuntosDAO.add(bolsaPuntos);
+            if (!respuesta.isEmpty()){
+                return Response.status(404).entity(respuesta).build();
+            }
         }
         return Response.ok().build();
     }
@@ -43,19 +47,25 @@ public class BolsaPuntosRest {
     @GET
     @Path("/cliente/{id_cliente}")
     public Response getByClienteId(@PathParam("id_cliente") Long id_cliente){
-        return Response.ok(bolsaPuntosDAO.getByClienteId(id_cliente)).build();
+        List<BolsaPuntos> listBolsa=bolsaPuntosDAO.getByClienteId(id_cliente);
+        if( !listBolsa.isEmpty()) return Response.ok(bolsaPuntosDAO.getByClienteId(id_cliente)).build();
+        return  Response.status(404).entity("No hay Bolsas para ese cliente").build();
     }
 
     @GET
     @Path("/rango/limiteI/{limiteI}/limiteS/{limiteS}")
     public Response getByRange(@PathParam("limiteI") Integer limiteI, @PathParam("limiteS") Integer limteS){
-        return  Response.ok(bolsaPuntosDAO.getByRange(limiteI,limteS)).build();
+        List<BolsaPuntos> listBolsa=bolsaPuntosDAO.getByRange(limiteI,limteS);
+        if (!listBolsa.isEmpty()) Response.ok(listBolsa).build();
+        return  Response.status(404).entity("No se encontro BolsasPuntos dentro de ese rango").build();
     }
 
     @GET
     @Path("/clientes/vencen/{dias}")
     public Response getByExpireDaysRest(@PathParam("dias") int dias){
-        return Response.ok(bolsaPuntosDAO.getByExpireDays(dias)).build();
+        List<Cliente> clientes=bolsaPuntosDAO.getByExpireDays(dias);
+        if (!clientes.isEmpty()) Response.ok(clientes).build();
+        return  Response.status(404).entity("No se encontro Clientes que vencen en : "+ String.valueOf(dias)+" dias").build();
     }
 
 }

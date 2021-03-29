@@ -29,22 +29,30 @@ public class BolsaPuntosDAO {
 
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public  void add(BolsaPuntos bolsa){
+    public  String add(BolsaPuntos bolsa){
 
        Date  currentDate=new Date(); //obtengo la fecha actual
        Integer duracion=vencimientoDAO.getDuracion(formatearDateString(currentDate));
+       System.out.println("-----------1----------");
        Integer cantPuntos = asignacionDAO.getReglaByMonto(bolsa.getMontoOperacion());
-
+       if (cantPuntos==null){
+           return "No existe regla para ese Monto";
+        }
+        System.out.println("-----------2----------");
        bolsa.setSaldoPuntos(cantPuntos); // mi saldo de puntos es igual a puntaAsignado al crear una nueva Bolsa
        bolsa.setPuntajesAsignado(cantPuntos); //le Cargo cantPuntos
        bolsa.setFechaAsignacion(currentDate);//La fecha es la fecha Actualidad
        bolsa.setFechaCaducidad(sumarRestarDiasFecha(currentDate,duracion.intValue())); // calculo la fecha de caducidad de acurdo a la duracion de mi puntaje
        bolsa.setPuntajeUtilizado(0); //No use ningun punto aun
        Cliente cliente= clienteDAO.get(bolsa.getCliente().getIdCliente());
-       if (cliente!=null){
-           bolsa.setCliente(cliente);
+
+       if (cliente==null){
+           return "No existe Cliente con ese Id";
        }
+        System.out.println("-----------3----------");
+       bolsa.setCliente(cliente);
        this.em.persist(bolsa);
+       return "";
     }
 
     public List<BolsaPuntos> getAll(){

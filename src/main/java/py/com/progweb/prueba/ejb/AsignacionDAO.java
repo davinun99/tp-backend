@@ -1,10 +1,12 @@
 package py.com.progweb.prueba.ejb;
 
 import py.com.progweb.prueba.model.AsignacionPuntos;
+import py.com.progweb.prueba.model.Cliente;
 import py.com.progweb.prueba.model.VencimientoPuntos;
 import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,8 +18,15 @@ public class AsignacionDAO {
     @PersistenceContext(unitName = "laboratiorioPersistanceUnit")
     private  EntityManager em;
     // funcion para agregar una nueva regla de asignacion
-    public void add(AsignacionPuntos asignacionPuntos){
-        em.persist(asignacionPuntos);
+    public Boolean add(AsignacionPuntos asignacionPuntos){
+
+        Query q = this.em.createQuery("select ap from AsignacionPuntos  ap where :LI between ap.limiteInferior and ap.limiteSuperior");
+        Query q2= this.em.createQuery("select ap from AsignacionPuntos  ap where :LS between ap.limiteInferior and ap.limiteSuperior");
+        if (q.setParameter("LI",asignacionPuntos.getLimiteInferior()).getResultList().isEmpty() && q2.setParameter("LS",asignacionPuntos.getLimiteSuperior()).getResultList().isEmpty() ){
+            this.em.persist(asignacionPuntos);
+            return true;
+        }
+        return false;
     }
     //funcion para listar todas las reglas
     public List<AsignacionPuntos> getAll(){
@@ -27,8 +36,14 @@ public class AsignacionDAO {
 
 
     public Integer getReglaByMonto( Integer monto ){
-        Query q= this.em.createQuery("select :monto / c.monto from AsignacionPuntos c where :monto between c.limiteInferior and c.limiteSuperior");
-        return  (Integer) q.setParameter("monto", monto).getSingleResult();
+        Query q= this.em.createQuery("select c from AsignacionPuntos c where :monto between c.limiteInferior and c.limiteSuperior");
+        AsignacionPuntos ap;
+        try {
+             ap = (AsignacionPuntos) q.setParameter("monto", monto).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+        return  (Integer) monto/ap.getMonto();
     }
 
     public Integer deleteAsignacion(Integer id_asignacion) {
