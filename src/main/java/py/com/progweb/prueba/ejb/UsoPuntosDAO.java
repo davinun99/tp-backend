@@ -53,16 +53,16 @@ public class UsoPuntosDAO {
         Query q = em.createQuery("select u from UsoPuntosCabecera u where u.cliente = :cliente");
         return (List<UsoPuntosCabecera>)q.setParameter("cliente", cliente).getResultList();
     }
-    public Integer utilizarPuntos(UsoPuntosCabecera usoPuntosCabecera){
+    public String utilizarPuntos(UsoPuntosCabecera usoPuntosCabecera){
         Long idCliente = usoPuntosCabecera.getCliente().getIdCliente();
         Integer idConceptoUso = usoPuntosCabecera.getConceptoPuntos().getIdConcepto();
         Cliente cliente= this.em.find(Cliente.class, idCliente);
         if(cliente == null){
-            return CodigosDeEstado.NOT_FOUND;
+            return "Cliente  no Existe";
         }
         ConceptoPuntos conceptoPuntos = this.em.find(ConceptoPuntos.class, idConceptoUso);
         if(conceptoPuntos == null){
-            return CodigosDeEstado.NOT_FOUND;
+            return "Concepto Puntos No existe";
         }
         Integer puntosRequeridos = conceptoPuntos.getPuntosRequeridos();
         UsoPuntosCabecera nuevaCabecera = new UsoPuntosCabecera();//preparo la cabecera con la informacion necesaria
@@ -70,11 +70,13 @@ public class UsoPuntosDAO {
         nuevaCabecera.setPuntajeUtilizado(puntosRequeridos);
         nuevaCabecera.setConceptoPuntos(conceptoPuntos);
         nuevaCabecera.setFecha(new Date());
-        this.addCabecera(nuevaCabecera); //guardo la cabecera
+
 
         if( bolsaPuntosDAO.getTotalDePuntosByCliente(idCliente) >= puntosRequeridos ){
+            this.addCabecera(nuevaCabecera); //guardo la cabecera
             //Si la cantidad de puntos es la necesaria continuo
-            List<BolsaPuntos> bolsaPuntosList = bolsaPuntosDAO.getByClienteId(idCliente);
+            //List<BolsaPuntos> bolsaPuntosList = bolsaPuntosDAO.getByClienteId(idCliente);
+            List<BolsaPuntos> bolsaPuntosList = bolsaPuntosDAO.getByClienteIdSaldoNoCero(idCliente);
             //consigo todas las listas de puntos del cliente
             for (BolsaPuntos bolsa: bolsaPuntosList) {
                 UsoPuntosDetalle nuevoDetalle = new UsoPuntosDetalle();
@@ -95,12 +97,12 @@ public class UsoPuntosDAO {
                 }
             }
         }else{
-            return CodigosDeEstado.PRECONDITION;
+            return "Cliente no Tiene los puntos requeridos para usar ese vale";
         }
         if( cliente.getEmail() != null ){
             sendEmail( cliente.getEmail(), "Has utilizado puntos en " + conceptoPuntos.getDescripcion() );
         }
-        return CodigosDeEstado.SUCCESS;
+        return "";
     }
     private void sendEmail(String to, String message) {
         MailEvent event = new MailEvent();

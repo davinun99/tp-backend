@@ -66,7 +66,11 @@ public class BolsaPuntosDAO {
         Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente order by fechaAsignacion asc");
         return (List<BolsaPuntos>) q.setParameter("cliente",cliente).getResultList();
     }
-
+    public List<BolsaPuntos>  getByClienteIdSaldoNoCero(Long id_cliente){
+        Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
+        Query q= em.createQuery("select b from BolsaPuntos b where  b.cliente= :cliente and b.saldoPuntos>0 order by fechaAsignacion asc");
+        return (List<BolsaPuntos>) q.setParameter("cliente",cliente).getResultList();
+    }
     //obtenemos todas las Bolsa de puntos cuyo SaldoPuntos estre entre el rango de LimiteInferior y limiteSuperior
     public List<BolsaPuntos> getByRange(Integer limiteInferior, Integer limiteSuperior){
         List<BolsaPuntos> bolsaPuntos= getAll();
@@ -91,18 +95,18 @@ public class BolsaPuntosDAO {
     }
     public void usarPuntos(BolsaPuntos bolsaPuntos, Integer puntosAUsar) {
         BolsaPuntos bolsa = this.em.find(BolsaPuntos.class,bolsaPuntos.getId());
-        if( bolsa.getSaldoPuntos() <= puntosAUsar){
-            System.out.println("Error, el puntaje a utilizar es mayor al saldo de la bolsa");
-        }else{
+        //if( bolsa.getSaldoPuntos() <= puntosAUsar){
+        //    System.out.println("Error, el puntaje a utilizar es mayor al saldo de la bolsa");
+        //}else{
             Integer saldo = bolsa.getSaldoPuntos();
             Integer puntajeUtilizado = bolsa.getPuntajeUtilizado();
             bolsa.setPuntajeUtilizado( puntajeUtilizado + puntosAUsar );
             bolsa.setSaldoPuntos( saldo - puntosAUsar );
-        }
+        //}
     }
     public Integer getTotalDePuntosByCliente(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD
-        Query q= em.createQuery("select count(b.saldoPuntos) from BolsaPuntos b where  b.cliente= :cliente");
+        Query q= em.createQuery("select SUM(b.saldoPuntos) from BolsaPuntos b where  b.cliente= :cliente and b.saldoPuntos>0");
         Long result = (Long)q.setParameter("cliente",cliente).getSingleResult();
         return result.intValue();
     }

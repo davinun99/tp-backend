@@ -22,7 +22,10 @@ public class UsoPuntosRest {
     public Response utilizarPuntos( List<UsoPuntosCabecera> listUsoPuntos){
         try{
             for (UsoPuntosCabecera usoPuntosCabecera : listUsoPuntos) {
-                this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+                String respuesta= this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+                if(!respuesta.isEmpty()){
+                    return Response.status(404).entity(respuesta).build();
+                }
             }
             return Response.ok().build();
         }catch (Exception ex){
