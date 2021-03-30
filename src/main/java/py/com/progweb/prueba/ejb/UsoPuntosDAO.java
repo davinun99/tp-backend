@@ -75,7 +75,6 @@ public class UsoPuntosDAO {
         if( bolsaPuntosDAO.getTotalDePuntosByCliente(idCliente) >= puntosRequeridos ){
             this.addCabecera(nuevaCabecera); //guardo la cabecera
             //Si la cantidad de puntos es la necesaria continuo
-            //List<BolsaPuntos> bolsaPuntosList = bolsaPuntosDAO.getByClienteId(idCliente);
             List<BolsaPuntos> bolsaPuntosList = bolsaPuntosDAO.getByClienteIdSaldoNoCero(idCliente);
             //consigo todas las listas de puntos del cliente
             for (BolsaPuntos bolsa: bolsaPuntosList) {

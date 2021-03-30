@@ -95,14 +95,11 @@ public class BolsaPuntosDAO {
     }
     public void usarPuntos(BolsaPuntos bolsaPuntos, Integer puntosAUsar) {
         BolsaPuntos bolsa = this.em.find(BolsaPuntos.class,bolsaPuntos.getId());
-        if( bolsa.getSaldoPuntos() > puntosAUsar){
-            System.out.println("Error, el puntaje a utilizar es mayor al saldo de la bolsa");
-        }else{
-            Integer saldo = bolsa.getSaldoPuntos();
-            Integer puntajeUtilizado = bolsa.getPuntajeUtilizado();
-            bolsa.setPuntajeUtilizado( puntajeUtilizado + puntosAUsar );
-            bolsa.setSaldoPuntos( saldo - puntosAUsar );
-        }
+        Integer saldo = bolsa.getSaldoPuntos();
+        Integer puntajeUtilizado = bolsa.getPuntajeUtilizado();
+        bolsa.setPuntajeUtilizado( puntajeUtilizado + puntosAUsar );
+        bolsa.setSaldoPuntos( saldo - puntosAUsar );
+        
     }
     public Integer getTotalDePuntosByCliente(Long id_cliente){
         Cliente cliente = clienteDAO.get(id_cliente); //obtengo el cleinte de mi BD

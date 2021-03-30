@@ -1,0 +1,57 @@
+POST http://localhost:8080/prueba/cliente/
+[
+    {
+        "nombre":"David",
+        "apellido":"Nuñez",
+        "ci":3223,
+        "tipoDocumento":"ci",
+        "nacionalidad":"Paraguaya",
+        "email":"nundavid99@gmail.com",
+        "telefono":981350027,
+        "fechaNacimiento":"2021-04-24" 
+    }
+]
+
+POST http://localhost:8080/prueba/vencimiento
+[{
+    "fechaInicio": "2021-03-01",
+    "fechaFin": "2021-03-31",
+    "duracion": 20
+}]
+
+POST http://localhost:8080/prueba/asignacion/
+[{
+    "limiteInferior":0,
+    "limiteSuperior":500000,
+    "monto": 100000
+}]
+
+POST http://localhost:8080/prueba/bolsaPuntos/
+[
+    {
+        "montoOperacion": 300000,
+        "cliente": {
+            "idCliente": 1
+        }
+    }
+]
+
+POST http://localhost:8080/prueba/conceptoPuntos
+[{
+    "descripcion": "vale de premio",
+    "puntosRequeridos": 1
+}]
+
+POST http://localhost:8080/prueba/usoPuntos
+[
+    {
+        "cliente":{
+            "idCliente":1
+        },
+        "conceptoPuntos":{
+            "idConcepto":1
+        }
+    }
+]
+
+GET http://localhost:8080/prueba/usoPuntos/fecha/2021-03-30
