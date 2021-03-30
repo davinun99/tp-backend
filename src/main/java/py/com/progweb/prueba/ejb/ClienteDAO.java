@@ -5,6 +5,7 @@ import py.com.progweb.prueba.model.Cliente;
 import py.com.progweb.prueba.utils.CodigosDeEstado;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -19,8 +20,10 @@ import java.util.List;
 public class ClienteDAO {
     @PersistenceContext(unitName = "laboratiorioPersistanceUnit")
     private  EntityManager em;
+
     // funcio para agregar un nuevo cliente
     public void add(Cliente cliente){
+        cliente.setFechaNacimiento(Fecha.sumarRestarDiasFecha(cliente.getFechaNacimiento(),1));
         this.em.persist(cliente);
     }
     //funcion para listar todos los clientes

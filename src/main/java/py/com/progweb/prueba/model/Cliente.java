@@ -46,7 +46,9 @@ public class Cliente {
     @Column(name = "fecha_nacimiento")
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+
     private Date fechaNacimiento;
 
     public  Cliente(){

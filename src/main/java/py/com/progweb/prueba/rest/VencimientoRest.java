@@ -21,7 +21,9 @@ public class VencimientoRest {
     @Path("/")
     public Response agregar(List<VencimientoPuntos> vencimientoPuntos){
         for (VencimientoPuntos vencimientoPunto:vencimientoPuntos){
-            this.vencimientoDAO.add(vencimientoPunto);
+            if (!this.vencimientoDAO.add(vencimientoPunto)){
+                return Response.status(404).entity("Regla Vencimiento se solapan").build();
+            }
         }
         return Response.ok().build();
     }
@@ -47,7 +49,7 @@ public class VencimientoRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Vencimiento Eliminado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Vencimiento No encontrado").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();
@@ -63,7 +65,7 @@ public class VencimientoRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Vencimiento Actualizado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Vencimiento No encontrado").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();

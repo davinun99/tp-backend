@@ -38,7 +38,7 @@ public class ConceptoRest {
         try {
             ConceptoPuntos concepto = conceptoDAO.getById(idConcepto);
             if(concepto == null){
-                response = Response.status(404).build();
+                response = Response.status(404).entity("Concepto Uso No encontrado").build();
             }else {
                 response = Response.ok().build();
             }
@@ -56,7 +56,7 @@ public class ConceptoRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Concepto " + idConcepto + " Eliminado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Concepto Uso No encontrado").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();
@@ -72,7 +72,7 @@ public class ConceptoRest {
             if (status == CodigosDeEstado.SUCCESS) {
                 respuesta = Response.ok("Concepto Actualizado Correctamente").build();
             } else if (status == CodigosDeEstado.NOT_FOUND) {
-                respuesta = Response.status(404).build();
+                respuesta = Response.status(404).entity("Concepto Uso No encontrado").build();
             }
         }catch (Exception ex){
             respuesta = Response.serverError().build();

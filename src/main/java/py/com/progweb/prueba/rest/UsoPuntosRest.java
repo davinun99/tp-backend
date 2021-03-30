@@ -22,7 +22,10 @@ public class UsoPuntosRest {
     public Response utilizarPuntos( List<UsoPuntosCabecera> listUsoPuntos){
         try{
             for (UsoPuntosCabecera usoPuntosCabecera : listUsoPuntos) {
-                this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+                String respuesta= this.usoPuntosDAO.utilizarPuntos(usoPuntosCabecera);
+                if(!respuesta.isEmpty()){
+                    return Response.status(404).entity(respuesta).build();
+                }
             }
             return Response.ok().build();
         }catch (Exception ex){
@@ -39,7 +42,7 @@ public class UsoPuntosRest {
     public Response getUsoByConcepto(@PathParam("idConcepto") Integer idConcepto){
         List<UsoPuntosCabecera> listaUsoPuntos = usoPuntosDAO.getByConcepto(idConcepto);
         if(listaUsoPuntos == null){
-            return Response.status(404).build();
+            return Response.status(404).entity("No se encontro UsoPuntos para ese Concepto").build();
         }
         return Response.ok(listaUsoPuntos).build();
     }
@@ -53,7 +56,7 @@ public class UsoPuntosRest {
     public Response getUsoByCliente(@PathParam("idCliente") Long idCliente){
         List<UsoPuntosCabecera> listaUsoPuntos = usoPuntosDAO.getByCliente(idCliente);
         if(listaUsoPuntos == null){
-            return Response.status(404).build();
+            return Response.status(404).entity("No se encontro UsoPuntos para ese cliente").build();
         }
         return Response.ok(listaUsoPuntos).build();
     }
